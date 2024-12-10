@@ -1,0 +1,28 @@
+# Виртуальное окружение
+.venv/
+env/
+ENV/
+
+# Конфигурационные файлы
+.env
+
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.swp
+
+# IDE файлы
+.idea/
+
+# Docker
+*.dockerfile
+
+# Системные файлы
+.DS_Store
+Thumbs.db
