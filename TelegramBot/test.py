@@ -1,63 +1,79 @@
-import asyncio
-import logging
+import random
+import json
+import pandas as pd
+from fuzzywuzzy import fuzz  # Импорт функции для сравнения строк
 
-import requests
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
-from aiogram.types import Message
+# Чтение всех вкладок из Excel-файла
+file_path = 'data/places.xlsx'
+sheets = pd.read_excel(file_path, sheet_name=None)
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)
-
-# Ваш API-ключ Яндекс.Карт
-YANDEX_API_KEY = 'e2361bc5-4b9a-4489-a803-5594fe96b3e8'
-
-# Токен вашего Telegram-бота
-TELEGRAM_BOT_TOKEN = '7345214682:AAGYBO_tkNnxKbyvw2qW5_nBQ834TQJmOh4'
-
-
-async def main():
-    # Инициализация бота и диспетчера
-    bot = Bot(token=TELEGRAM_BOT_TOKEN)
-    dp = Dispatcher()
-    dp.message.register(send_welcome, Command(commands=['start']))
-    dp.message.register(handle_message)
-    await dp.start_polling(bot)
+# Парсинг данных из каждой вкладок Excel и преобразование в общий словарь
+places_data = {}
+for sheet_name, df in sheets.items():
+    if not df.empty:
+        df = df.rename(columns={
+            "Название": "название",
+            "Описание": "описание",
+            "Местоположение": "адрес",
+            "Карта": "карта"
+        })
+        places_data[sheet_name.lower()] = df.to_dict(orient="records")
 
 
-def search_places(query):
-    url = f"https://search-maps.yandex.ru/v1/?text={query}&lang=ru_RU&apikey={YANDEX_API_KEY}"
-    response = requests.get(url)
-    data = response.json()
+# Функция для получения данных о конкретной достопримечательности
+def get_place_details(query=None):
+    """
+    Функция для поиска данных о достопримечательности по запросу.
+    Ищет совпадение по частям (словам) из запроса и останавливается, как только находит одно точное совпадение.
+    """
+    if query:  # Проверяем, есть ли запрос
+        # Приведение запроса к нижнему регистру и разбивка на слова
+        query_words = query.lower().split()
 
-    places = []
-    for place in data.get('features', [])[:3]:
-        name = place['properties']['name']
-        rating = place['properties'].get('CompanyMetaData', {}).get('rating', 'Нет рейтинга')
-        description = place['properties'].get('description', 'Нет описания')
-        places.append({'name': name, 'rating': rating, 'description': description})
+        best_match = None
+        best_score = 0
 
-    return places
+        # Поиск совпадений по каждому слову во всех категориях
+        for word in query_words:  # Перебираем каждое слово из запроса
+            for category, places in places_data.items():
+                for place in places:
+                    place_name = place['название'].lower()
+                    # Сравниваем схожесть слова из запроса и названия места
+                    similarity_score = fuzz.partial_ratio(word, place_name)
+                    if similarity_score > best_score:
+                        best_score = similarity_score
+                        best_match = place
 
+                    # Если совпадение высокое, сразу возвращаем место
+                    if similarity_score > 80:  # Порог для быстрого выхода
+                        return (
+                            f"Вот информация о месте '{place['название']}':\n"
+                            f"Описание: {place['описание']}\n"
+                            f"Адрес: {place['адрес']}\n"
+                            f"Карта: {place['карта']}"
+                        )
 
-async def send_welcome(message: Message):
-    await message.reply(
-        "Привет! Я бот, который поможет тебе найти места. Просто напиши, что ты ищешь, например, 'грузинское кафе'.")
+        # Если найдено хорошее совпадение, возвращаем его
+        if best_match and best_score > 60:  # Порог схожести для совпадения (можно менять)
+            return (
+                f"Вот информация о месте '{best_match['название']}':\n"
+                f"Описание: {best_match['описание']}\n"
+                f"Адрес: {best_match['адрес']}\n"
+                f"Карта: {best_match['карта']}"
+            )
 
+    # Если запрос пустой или ничего не найдено, возвращаем случайную достопримечательность
+    random_category = random.choice(list(places_data.keys()))
+    random_place = random.choice(places_data[random_category])
+    return (
+        f"Вот случайная достопримечательность:\n"
+        f"Название: {random_place['название']}\n"
+        f"Описание: {random_place['описание']}\n"
+        f"Адрес: {random_place['адрес']}\n"
+        f"Карта: {random_place['карта']}"
+    )
 
-async def handle_message(message: Message):
-    query = message.text
-    places = search_places(query)
-
-    if places:
-        response = ""
-        for i, place in enumerate(places, 1):
-            response += f"{i}. {place['name']}\nРейтинг: {place['rating']}\nОписание: {place['description']}\n\n"
-        await message.reply(response)
-    else:
-        await message.reply("К сожалению, по вашему запросу ничего не найдено. Попробуйте уточнить запрос.")
-
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
+# Пример использования
+query = "хочу глянуть склады какие то"  # Пример запроса
+response = get_place_details(query)
+print(response)

@@ -1,0 +1,266 @@
+/* Базовый стиль для всего сайта */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #eef3f8;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Шапка сайта */
+header {
+  background: linear-gradient(45deg, #1e88e5, #1565c0);
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0 0 15px 15px;
+  transition: background 0.3s ease;
+  animation: fadeInDown 1s ease; /* Анимация для шапки */
+}
+
+@keyframes fadeInDown {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Контейнер для всей страницы */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Карта */
+#map {
+  width: 100%;
+  height: 850px;
+  margin: 20px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: filter 0.3s ease;
+  animation: fadeIn 1s ease; /* Анимация для карты */
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.dark-mode #map {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Контейнер управления */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  width: 90%;
+  flex-wrap: wrap; /* Для мобильных устройств */
+  animation: fadeInUp 1s ease; /* Анимация для элементов управления */
+}
+
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Поле ввода */
+.controls input {
+  padding: 14px;
+  font-size: 16px;
+  width: 70%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-right: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: bounceIn 1s ease; /* Анимация для поля ввода */
+}
+
+@keyframes bounceIn {
+  from, 20%, 40%, 60%, 80%, to {
+      animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  0% {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+      transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+      transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+      transform: scale3d(0.97, 0.97, 0.97);
+  }
+  to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+  }
+}
+
+.controls input:focus {
+  outline: none;
+  border-color: #1e88e5;
+  box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+}
+
+/* Кнопки */
+.controls button {
+  padding: 12px 30px;
+  background: linear-gradient(45deg, #1e88e5, #1565c0);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  margin: 5px; /* Добавляем отступы для мобильных устройств */
+  animation: bounceIn 1s ease; /* Анимация для кнопок */
+}
+
+.controls button:hover {
+  background: linear-gradient(45deg, #1565c0, #1e88e5);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.controls button:active {
+  transform: scale(0.96);
+}
+
+/* Карточка Popup */
+.popup-card {
+  font-family: 'Roboto', Arial, sans-serif;
+  width: 280px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background: linear-gradient(135deg, #f9f9f9, #eef3f8);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Изображение в карточке */
+.popup-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Текстовая информация в карточке */
+.popup-card .info {
+  padding: 15px;
+}
+
+.popup-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+.popup-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Кнопка в карточке */
+.popup-card button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 0;
+  font-size: 16px;
+  color: white;
+  background: linear-gradient(45deg, #1e88e5, #1565c0);
+  border: none;
+  cursor: pointer;
+  border-radius: 0 0 10px 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.popup-card button:hover {
+  background: linear-gradient(45deg, #1565c0, #1e88e5);
+}
+
+/* Скрыть надпись "Leaflet" внизу справа */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 768px) {
+  /* Уменьшаем размер карты */
+  #map {
+      height: 400px;
+  }
+
+  /* Уменьшаем размер кнопок и поля ввода */
+  .controls input {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+  }
+
+  .controls button {
+      width: 100%;
+      margin: 5px 0;
+  }
+
+  /* Уменьшаем размер текста */
+  .popup-card h3 {
+      font-size: 16px;
+  }
+
+  .popup-card p {
+      font-size: 12px;
+  }
+}

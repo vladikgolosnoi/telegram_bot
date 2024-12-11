@@ -10,7 +10,7 @@ from bot.handlers.map.start import router as map_router
 def register_handlers(dp: Dispatcher):
     dp.include_router(start_router)
     dp.include_router(help_router)
+    dp.include_router(map_router)
+    dp.include_router(weather_router)
     dp.include_router(start_chat_router)
     dp.include_router(chat_router)
-    dp.include_router(weather_router)
-    dp.include_router(map_router)
