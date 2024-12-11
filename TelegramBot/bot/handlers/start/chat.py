@@ -3,10 +3,10 @@ from aiogram.enums import ChatAction
 from aiogram.types import Message
 
 from bot.States.chat import ChatStates
-from bot.handlers.chat.utils.escape import escape_markdown
+from bot.handlers.start.utils.escape import escape_markdown
 from bot.utils.chats import chat
-from bot.handlers.chat.utils.extract_user import extract_user_input
-from bot.handlers.chat.utils.send_response import send_default_response
+from bot.handlers.start.utils.extract_user import extract_user_input
+from bot.handlers.start.utils.send_response import send_default_response
 
 router = Router()
 

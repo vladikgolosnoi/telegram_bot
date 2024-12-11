@@ -1,12 +1,10 @@
 import asyncio
 import logging
 
-import g4f.Provider
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
-from g4f import AsyncClient
 
 from bot.config import load_config, Config
 from bot.handlers import register_handlers
@@ -20,9 +18,9 @@ logger = logging.getLogger(__name__)
 # Функция для установки команд в меню
 async def set_bot_commands(bot: Bot):
     commands = [
-        BotCommand(command="start", description="Начать работу с ботом"),
+        BotCommand(command="start", description="Начать общение с ботом"),
+        BotCommand(command="events", description="Узнать грядущие события"),
         BotCommand(command="map", description="Открыть карту"),
-        BotCommand(command="chat", description="Общение с ботом"),
         BotCommand(command="weather", description="Погода в Ростове"),
     ]
     await bot.set_my_commands(commands)

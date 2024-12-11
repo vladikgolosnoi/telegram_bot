@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # Функция для запуска main.py
 run_main() {
