@@ -31,8 +31,8 @@ BOT_TOKEN=ваш-токен-бота
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/your-repo/telegram-bot.git
-   cd telegram-bot/TelegramBot
+   git clone https://github.com/vladikgolosnoi/telegram_bot.git
+   cd telegram_bot/TelegramBot
    ```
 
 2. Создайте виртуальное окружение (рекомендуется):
